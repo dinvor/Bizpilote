@@ -124,41 +124,47 @@
         © 2025 Bizpilote – Data & IA
     </footer>
 <script>
-    // URL de ton API Google Sheets
     const API_URL = "https://script.google.com/macros/s/AKfycbxTEli97kHN5qqeF-V1TSlITPkv19DXpqrvTrsZn6-JwxA0NNwy0WMjx5K3cyTJuHR0/exec";
 
-    // Fonction pour charger les données depuis Google Sheets
     async function loadData() {
         try {
             const response = await fetch(API_URL);
             const data = await response.json();
 
-            // Chargement des sections
-            renderCards("seo-container", data.seo);
-            renderCards("services-container", data.services);
-            renderCards("technos-container", data.technos);
-            renderCards("testimonials-container", data.testimonials);
-            renderCards("articles-container", data.articles);
+            // HERO
+            if (data.Hero && data.Hero[1]) {
+                document.querySelector(".hero h1").textContent = data.Hero[1][0];
+                document.querySelector(".hero p").textContent = data.Hero[1][1];
+                document.querySelector(".hero img").src = data.Hero[1][2];
+            }
+
+            // SECTIONS
+            renderCards("seo-container", data.SEO);
+            renderCards("services-container", data.Services);
+            renderCards("technos-container", data.Technologies);
+            renderCards("testimonials-container", data.Testimonials);
+            renderCards("articles-container", data.Articles);
 
         } catch (error) {
-            console.error("Erreur lors du chargement des données :", error);
+            console.error("Erreur API :", error);
         }
     }
 
-    // Fonction pour afficher les cartes
     function renderCards(containerId, items) {
         const container = document.getElementById(containerId);
         if (!container || !items) return;
 
-        container.innerHTML = items.map(item => `
+        // On ignore la première ligne (les titres)
+        const rows = items.slice(1);
+
+        container.innerHTML = rows.map(row => `
             <div class="card">
-                ${item.image ? `<img src="${item.image}" alt="">` : ""}
-                <h3>${item.title || ""}</h3>
-                <p>${item.description || ""}</p>
+                ${row[2] ? `<img src="${row[2]}" alt="">` : ""}
+                <h3>${row[0] || ""}</h3>
+                <p>${row[1] || ""}</p>
             </div>
         `).join("");
     }
 
-    // Lancement automatique
     loadData();
 </script>
