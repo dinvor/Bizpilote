@@ -1,658 +1,164 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Site Data / IA – Dynamique Google Sheets</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bizpilote – Data & IA</title>
 
-  <style>
-    :root {
-      --bg: #ffffff;
-      --text: #0b1320;
-      --muted: #6b7280;
-      --card-bg: #ffffff;
-      --neon1: #00f2ff;
-      --neon2: #00ff88;
-      --radius: 22px;
-      --transition: 0.35s ease;
-    }
-    .dark {
-      --bg: #0b1320;
-      --text: #e5faff;
-      --muted: #9bbac7;
-      --card-bg: #111a2b;
-    }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Inter", Arial, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-      transition: background var(--transition), color var(--transition);
-    }
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #0a0f14;
+            color: white;
+        }
 
-    /* LOADER */
-    #loader {
-      position: fixed;
-      inset: 0;
-      background: #000;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-    }
-    .loader-bar {
-      width: 260px;
-      height: 10px;
-      border-radius: 20px;
-      background: #222;
-      overflow: hidden;
-      margin-bottom: 15px;
-    }
-    .loader-progress {
-      width: 0%;
-      height: 100%;
-      background: linear-gradient(90deg, var(--neon1), var(--neon2));
-      animation: load 2s infinite;
-    }
-    @keyframes load {
-      0% { width: 0%; }
-      50% { width: 100%; }
-      100% { width: 0%; }
-    }
-    #loader p { color: #fff; font-size: 1.1rem; }
+        header, section {
+            padding: 60px 20px;
+            max-width: 1100px;
+            margin: auto;
+        }
 
-    /* TOGGLE DARK MODE */
-    #toggle-dark {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      width: 50px;
-      height: 26px;
-      background: #ccc;
-      border-radius: 30px;
-      cursor: pointer;
-      transition: var(--transition);
-      z-index: 999;
-    }
-    #toggle-dark::after {
-      content: "";
-      position: absolute;
-      top: 3px;
-      left: 3px;
-      width: 20px;
-      height: 20px;
-      background: #fff;
-      border-radius: 50%;
-      transition: var(--transition);
-    }
-    .dark #toggle-dark { background: #4a5568; }
-    .dark #toggle-dark::after { transform: translateX(24px); }
+        h1, h2 {
+            color: #00ffcc;
+            text-shadow: 0 0 10px #00ffcc;
+        }
 
-    .section { padding: 70px 20px; }
-    .container { max-width: 1200px; margin: 0 auto; }
-    h1, h2, h3 { font-weight: 700; }
-    h2 {
-      font-size: clamp(1.8rem, 2.4vw, 2.4rem);
-      margin-bottom: 10px;
-      text-align: center;
-    }
-    .section-subtitle {
-      text-align: center;
-      color: var(--muted);
-      margin-bottom: 30px;
-    }
+        .card {
+            background: #111;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 1px solid #00ffcc55;
+            box-shadow: 0 0 10px #00ffcc33;
+        }
 
-    /* HERO */
-    .hero {
-      min-height: 80vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 40px 20px;
-      position: relative;
-      overflow: hidden;
-      background: radial-gradient(circle at top left, #04101f, #020712 60%);
-    }
-    .hero-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
-      gap: 40px;
-      align-items: center;
-    }
-    .hero-text h1 {
-      font-size: clamp(2.4rem, 4vw, 3.6rem);
-      color: #e9f9ff;
-      margin-bottom: 15px;
-    }
-    .hero-text p {
-      color: #b7d7e6;
-      font-size: 1.05rem;
-      max-width: 520px;
-    }
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(0, 242, 255, 0.4);
-      background: rgba(3, 16, 32, 0.8);
-      color: #c7f9ff;
-      font-size: 0.85rem;
-      margin-bottom: 14px;
-    }
-    .hero-image-wrapper {
-      position: relative;
-      border-radius: 26px;
-      overflow: hidden;
-      box-shadow: 0 0 40px rgba(0, 242, 255, 0.25);
-      transform: translateZ(0);
-    }
-    .hero-image-wrapper img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-    .hero-glow {
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at 10% 0%, rgba(0, 242, 255, 0.35), transparent 55%);
-      mix-blend-mode: screen;
-      pointer-events: none;
-    }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+        }
 
-    /* GRID & CARDS */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 24px;
-    }
-    .card,
-    .card-dynamic,
-    .card-article {
-      background: var(--card-bg);
-      padding: 22px;
-      border-radius: var(--radius);
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
-      transition: var(--transition);
-      position: relative;
-    }
-    .card:hover,
-    .card-dynamic:hover,
-    .card-article:hover {
-      transform: translateY(-10px) scale(1.03);
-      box-shadow: 0 0 25px var(--neon1);
-    }
-    .card-icon { font-size: 1.6rem; margin-bottom: 10px; }
-    .card-title { font-weight: 600; margin-bottom: 6px; }
-    .card-text { color: var(--muted); font-size: 0.95rem; }
+        img {
+            width: 100%;
+            border-radius: 10px;
+        }
 
-    .card-dynamic { border-left: 4px solid var(--neon1); }
+        .hero {
+            text-align: center;
+            padding: 100px 20px;
+        }
 
-    .card-article {
-      border-left: 4px solid var(--neon2);
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .article-meta { font-size: 0.8rem; color: var(--muted); }
-    .article-link {
-      margin-top: 6px;
-      font-size: 0.9rem;
-      color: var(--neon1);
-      text-decoration: none;
-    }
-    .article-link:hover { text-decoration: underline; }
+        .hero img {
+            max-width: 300px;
+            border-radius: 10px;
+        }
 
-    /* TESTIMONIALS */
-    .stars { color: #facc15; font-size: 0.95rem; margin-top: 4px; }
-    .testimonial-name { font-weight: 600; margin-top: 10px; }
-    .testimonial-message { font-size: 0.95rem; color: var(--muted); }
-
-    /* CONTACT */
-    .contact-box {
-      max-width: 600px;
-      margin: 0 auto;
-      text-align: center;
-      background: var(--card-bg);
-      padding: 26px;
-      border-radius: var(--radius);
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
-    }
-    .contact-box p { margin-bottom: 14px; color: var(--muted); }
-    .contact-link {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 10px 18px;
-      border-radius: 999px;
-      border: 1px solid var(--neon1);
-      color: var(--neon1);
-      text-decoration: none;
-      font-size: 0.95rem;
-      transition: var(--transition);
-    }
-    .contact-link:hover { background: var(--neon1); color: #021018; }
-
-    /* SEO PREVIEW */
-    .seo-preview {
-      max-width: 700px;
-      margin: 0 auto;
-      background: var(--card-bg);
-      padding: 18px 20px;
-      border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-      border-left: 4px solid var(--neon2);
-    }
-    .seo-title { color: #1d4ed8; font-size: 1rem; margin-bottom: 4px; }
-    .seo-url { color: #16a34a; font-size: 0.85rem; margin-bottom: 4px; }
-    .seo-desc { color: var(--muted); font-size: 0.9rem; }
-
-    /* SCROLL REVEAL */
-    .reveal {
-      opacity: 0;
-      transform: translateY(40px);
-      transition: 0.9s ease;
-    }
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    footer {
-      background: #020617;
-      color: #e5faff;
-      padding: 26px 20px;
-      text-align: center;
-      margin-top: 40px;
-      font-size: 0.9rem;
-    }
-    footer a { color: var(--neon1); text-decoration: none; }
-    footer a:hover { text-decoration: underline; }
-
-    @media (max-width: 800px) {
-      .hero-inner { grid-template-columns: 1fr; }
-      .hero-text { text-align: center; }
-      .hero-text p { margin: 0 auto; }
-    }
-    @media (max-width: 600px) {
-      #toggle-dark { top: 15px; right: 15px; }
-      .section { padding: 55px 16px; }
-    }
-  </style>
+        footer {
+            text-align: center;
+            padding: 40px;
+            color: #00ffcc;
+        }
+    </style>
 </head>
 <body>
-  <div id="loader">
-    <div class="loader-bar"><div class="loader-progress"></div></div>
-    <p>Chargement des données…</p>
-  </div>
 
-  <div id="toggle-dark"></div>
+    <!-- SECTION HERO -->
+    <section class="hero">
+        <h1>Bizpilote – Data & Intelligence Artificielle</h1>
+        <p>Solutions modernes pour entrepreneurs, PME et indépendants.</p>
+        <img src="https://images.unsplash.com/photo-1535223289827-42f1e9919769" alt="Data & IA">
+    </section>
 
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-inner container reveal" id="hero-content">
-      <div class="hero-text">
-        <div class="hero-badge">Data • IA • Décision</div>
-        <h1>Chargement du titre…</h1>
-        <p>Chargement du sous-titre…</p>
-      </div>
-      <div class="hero-image-wrapper">
-        <img src="https://images.pexels.com/photos/3183186/pexels-photo-3183186.jpeg" alt="Data & IA" />
-        <div class="hero-glow"></div>
-      </div>
-    </div>
-  </section>
+    <!-- SECTION SEO -->
+    <section>
+        <h2>SEO & Visibilité</h2>
+        <div class="grid" id="seo-container">
+            <!-- Contenu chargé via API Google Sheets -->
+        </div>
+    </section>
 
-  <!-- SEO -->
-  <section class="section">
-    <div class="container reveal">
-      <h2>SEO de la page 🔍</h2>
-      <p class="section-subtitle">Titre et description issus de ta base Google Sheets.</p>
-      <div class="seo-preview" id="seo-preview">
-        <div class="seo-title">Titre SEO en cours de chargement…</div>
-        <div class="seo-url">https://ton-site-data-ia.fr</div>
-        <div class="seo-desc">Description SEO en cours de chargement…</div>
-      </div>
-    </div>
-  </section>
+    <!-- SECTION SERVICES -->
+    <section>
+        <h2>Services</h2>
+        <div class="grid" id="services-container">
+            <!-- Contenu chargé via API Google Sheets -->
+        </div>
+    </section>
 
-  <!-- SERVICES -->
-  <section class="section">
-    <div class="container reveal">
-      <h2>Services</h2>
-      <p class="section-subtitle">Les services sont gérés depuis ta base Google Sheets.</p>
-      <div class="grid" id="services-container"></div>
-    </div>
-  </section>
+    <!-- SECTION TECHNOLOGIES -->
+    <section>
+        <h2>Technologies</h2>
+        <div class="grid" id="technos-container">
+            <!-- Contenu chargé via API Google Sheets -->
+        </div>
+    </section>
 
-  <!-- TECHNOLOGIES -->
-  <section class="section">
-    <div class="container reveal">
-      <h2>Technologies</h2>
-      <p class="section-subtitle">Outils, stacks et technologies que tu utilises.</p>
-      <div class="grid" id="technologies-container"></div>
-    </div>
-  </section>
+    <!-- SECTION TESTIMONIALS -->
+    <section>
+        <h2>Témoignages</h2>
+        <div class="grid" id="testimonials-container">
+            <!-- Contenu chargé via API Google Sheets -->
+        </div>
+    </section>
 
-  <!-- TESTIMONIALS -->
-  <section class="section">
-    <div class="container reveal">
-      <h2>Témoignages</h2>
-      <p class="section-subtitle">Avis clients synchronisés depuis ta base Google Sheets.</p>
-      <div class="grid" id="testimonials-container"></div>
-    </div>
-  </section>
+    <!-- SECTION ARTICLES -->
+    <section>
+        <h2>Articles & Ressources</h2>
+        <div class="grid" id="articles-container">
+            <!-- Contenu chargé via API Google Sheets -->
+        </div>
+    </section>
 
-  <!-- CONTACT -->
-  <section class="section">
-    <div class="container reveal">
-      <h2>Contact</h2>
-      <p class="section-subtitle">Texte et lien de formulaire gérés dans Google Sheets.</p>
-      <div class="contact-box" id="contact-box">
-        <p>Chargement des informations de contact…</p>
-      </div>
-    </div>
-  </section>
+    <!-- SECTION CONTACT -->
+    <section>
+        <h2>Contact</h2>
+        <div class="card">
+            <p>Email : <strong>contact@bizpilote.com</strong></p>
+            <p>WhatsApp : <strong>+33 7 49 92 68 85</strong></p>
+            <p>Adresse : Tourcoing, France</p>
+        </div>
+    </section>
 
-  <!-- ARTICLES -->
-  <section class="section">
-    <div class="container reveal">
-      <h2>Articles</h2>
-      <p class="section-subtitle">Articles pilotés depuis ta base Google Sheets (CMS léger).</p>
-      <div class="grid" id="articles-container"></div>
-    </div>
-  </section>
+    <footer>
+        © 2025 Bizpilote – Data & IA
+    </footer>
+<script>
+    // URL de ton API Google Sheets
+    const API_URL = "https://script.google.com/macros/s/AKfycbxTEli97kHN5qqeF-V1TSlITPkv19DXpqrvTrsZn6-JwxA0NNwy0WMjx5K3cyTJuHR0/exec";
 
-  <footer>
-    <p>© 2026 – Site Data / IA dynamique • Propulsé par Google Sheets & Apps Script</p>
-  </footer>
+    // Fonction pour charger les données depuis Google Sheets
+    async function loadData() {
+        try {
+            const response = await fetch(API_URL);
+            const data = await response.json();
 
-  <script>
-    window.addEventListener("load", () => {
-      setTimeout(() => {
-        const loader = document.getElementById("loader");
-        loader.style.opacity = "0";
-        setTimeout(() => (loader.style.display = "none"), 500);
-      }, 800);
-    });
+            // Chargement des sections
+            renderCards("seo-container", data.seo);
+            renderCards("services-container", data.services);
+            renderCards("technos-container", data.technos);
+            renderCards("testimonials-container", data.testimonials);
+            renderCards("articles-container", data.articles);
 
-    const toggle = document.getElementById("toggle-dark");
-    toggle.addEventListener("click", () => {
-      document.body.classList.toggle("dark");
-    });
-
-    const reveals = document.querySelectorAll(".reveal");
-    function revealOnScroll() {
-      reveals.forEach((el) => {
-        const rect = el.getBoundingClientRect();
-        if (rect.top < window.innerHeight - 100) {
-          el.classList.add("visible");
+        } catch (error) {
+            console.error("Erreur lors du chargement des données :", error);
         }
-      });
-    }
-    window.addEventListener("scroll", revealOnScroll);
-    revealOnScroll();
-
-    const SHEETS_API_URL =
-      "https://script.google.com/macros/s/AKfycbxTEli97kHN5qqeF-V1TSlITPkv19DXpqrvTrsZn6-JwxA0NNwy0WMjx5K3cyTJuHR0/exec";
-
-    function indexOfHeader(headers, name) {
-      return headers.indexOf(name);
     }
 
-    async function loadFromSheets() {
-      try {
-        const res = await fetch(SHEETS_API_URL);
-        const allData = await res.json();
+    // Fonction pour afficher les cartes
+    function renderCards(containerId, items) {
+        const container = document.getElementById(containerId);
+        if (!container || !items) return;
 
-        const heroSheet = allData["Hero"];
-        const seoSheet = allData["SEO"];
-        const servicesSheet = allData["Services"];
-        const techSheet = allData["Technologies"];
-        const testimonialsSheet = allData["Testimonials"];
-        const contactSheet = allData["Contact"];
-        const articlesSheet = allData["Articles"];
-
-        const heroEl = document.getElementById("hero-content");
-        const seoPreview = document.getElementById("seo-preview");
-        const servicesContainer = document.getElementById("services-container");
-        const techContainer = document.getElementById("technologies-container");
-        const testimonialsContainer = document.getElementById("testimonials-container");
-        const contactBox = document.getElementById("contact-box");
-        const articlesContainer = document.getElementById("articles-container");
-
-        /* HERO : titre, sous_titre, image */
-        if (Array.isArray(heroSheet) && heroSheet.length > 1) {
-          const headers = heroSheet[0];
-          const iTitre = indexOfHeader(headers, "titre");
-          const iSousTitre = indexOfHeader(headers, "sous_titre");
-          const iImage = indexOfHeader(headers, "image");
-          const row = heroSheet[1];
-
-          const titre = iTitre >= 0 ? row[iTitre] : "";
-          const sousTitre = iSousTitre >= 0 ? row[iSousTitre] : "";
-          const image =
-            iImage >= 0 && row[iImage]
-              ? row[iImage]
-              : "https://images.pexels.com/photos/3183186/pexels-photo-3183186.jpeg";
-
-          heroEl.innerHTML = `
-            <div class="hero-text">
-              <div class="hero-badge">Data • IA • Décision</div>
-              <h1>${titre || "Titre Hero"}</h1>
-              <p>${sousTitre || ""}</p>
+        container.innerHTML = items.map(item => `
+            <div class="card">
+                ${item.image ? `<img src="${item.image}" alt="">` : ""}
+                <h3>${item.title || ""}</h3>
+                <p>${item.description || ""}</p>
             </div>
-            <div class="hero-image-wrapper">
-              <img src="${image}" alt="Hero" />
-              <div class="hero-glow"></div>
-            </div>
-          `;
-        }
-
-        /* SEO : page, title, description */
-        if (Array.isArray(seoSheet) && seoSheet.length > 1) {
-          const headers = seoSheet[0];
-          const iPage = indexOfHeader(headers, "page");
-          const iTitle = indexOfHeader(headers, "title");
-          const iDescription = indexOfHeader(headers, "description");
-          const row = seoSheet[1];
-
-          const page = iPage >= 0 ? row[iPage] : "";
-          const title = iTitle >= 0 ? row[iTitle] : "Titre SEO par défaut";
-          const desc =
-            iDescription >= 0 ? row[iDescription] : "Description SEO par défaut.";
-
-          seoPreview.innerHTML = `
-            <div class="seo-title">${title}</div>
-            <div class="seo-url">${page || "https://ton-site-data-ia.fr"}</div>
-            <div class="seo-desc">${desc}</div>
-          `;
-          document.title = title;
-        }
-
-        /* SERVICES : titre, description, image */
-        servicesContainer.innerHTML = "";
-        if (Array.isArray(servicesSheet) && servicesSheet.length > 1) {
-          const headers = servicesSheet[0];
-          const iTitre = indexOfHeader(headers, "titre");
-          const iDescription = indexOfHeader(headers, "description");
-          const iImage = indexOfHeader(headers, "image");
-
-          for (let r = 1; r < servicesSheet.length; r++) {
-            const row = servicesSheet[r];
-            const titre = iTitre >= 0 ? row[iTitre] : "";
-            const desc = iDescription >= 0 ? row[iDescription] : "";
-            const image = iImage >= 0 ? row[iImage] : "";
-
-            if (!titre && !desc && !image) continue;
-
-            const card = document.createElement("div");
-            card.className = "card-dynamic reveal";
-            card.innerHTML = `
-              <div class="card-icon">🛠️</div>
-              <div class="card-title">${titre}</div>
-              <div class="card-text">${desc}</div>
-              ${
-                image
-                  ? `<div style="margin-top:10px;"><img src="${image}" alt="${titre}" style="width:100%;border-radius:14px;object-fit:cover;max-height:180px;"></div>`
-                  : ""
-              }
-            `;
-            servicesContainer.appendChild(card);
-          }
-        }
-
-        /* TECHNOLOGIES : titre, description, image */
-        techContainer.innerHTML = "";
-        if (Array.isArray(techSheet) && techSheet.length > 1) {
-          const headers = techSheet[0];
-          const iTitre = indexOfHeader(headers, "titre");
-          const iDescription = indexOfHeader(headers, "description");
-          const iImage = indexOfHeader(headers, "image");
-
-          for (let r = 1; r < techSheet.length; r++) {
-            const row = techSheet[r];
-            const titre = iTitre >= 0 ? row[iTitre] : "";
-            const desc = iDescription >= 0 ? row[iDescription] : "";
-            const image = iImage >= 0 ? row[iImage] : "";
-
-            if (!titre && !desc && !image) continue;
-
-            const card = document.createElement("div");
-            card.className = "card-dynamic reveal";
-            card.innerHTML = `
-              <div class="card-icon">⚙️</div>
-              <div class="card-title">${titre}</div>
-              <div class="card-text">${desc}</div>
-              ${
-                image
-                  ? `<div style="margin-top:10px;"><img src="${image}" alt="${titre}" style="width:100%;border-radius:14px;object-fit:cover;max-height:180px;"></div>`
-                  : ""
-              }
-            `;
-            techContainer.appendChild(card);
-          }
-        }
-
-        /* TESTIMONIALS : nom, message, stars */
-        testimonialsContainer.innerHTML = "";
-        if (Array.isArray(testimonialsSheet) && testimonialsSheet.length > 1) {
-          const headers = testimonialsSheet[0];
-          const iNom = indexOfHeader(headers, "nom");
-          const iMessage = indexOfHeader(headers, "message");
-          const iStars = indexOfHeader(headers, "stars");
-
-          for (let r = 1; r < testimonialsSheet.length; r++) {
-            const row = testimonialsSheet[r];
-            const nom = iNom >= 0 ? row[iNom] : "";
-            const message = iMessage >= 0 ? row[iMessage] : "";
-            const starsVal = iStars >= 0 ? row[iStars] : "";
-            const starsCount = parseInt(starsVal || "0", 10) || 0;
-            const stars =
-              "★".repeat(Math.min(starsCount, 5)) +
-              "☆".repeat(Math.max(0, 5 - starsCount));
-
-            if (!nom && !message) continue;
-
-            const card = document.createElement("div");
-            card.className = "card-dynamic reveal";
-            card.innerHTML = `
-              <div class="testimonial-message">“${message}”</div>
-              <div class="stars">${stars}</div>
-              <div class="testimonial-name">${nom}</div>
-            `;
-            testimonialsContainer.appendChild(card);
-          }
-        }
-
-        /* CONTACT : texte, lien_formulaire */
-        if (Array.isArray(contactSheet) && contactSheet.length > 1) {
-          const headers = contactSheet[0];
-          const iTexte = indexOfHeader(headers, "texte");
-          const iLien = indexOfHeader(headers, "lien_formulaire");
-          const row = contactSheet[1];
-
-          const texte = iTexte >= 0 ? row[iTexte] : "Contactez-moi.";
-          const lien = iLien >= 0 ? row[iLien] : "#";
-
-          contactBox.innerHTML = `
-            <p>${texte}</p>
-            <a href="${lien}" target="_blank" rel="noopener" class="contact-link">
-              Ouvrir le formulaire
-            </a>
-          `;
-        }
-
-        /* ARTICLES : titre, slug, extrait, url_page_sites, date, auteur, image, contenu, categorie, statut */
-        articlesContainer.innerHTML = "";
-        if (Array.isArray(articlesSheet) && articlesSheet.length > 1) {
-          const headers = articlesSheet[0];
-          const iTitre = indexOfHeader(headers, "titre");
-          const iSlug = indexOfHeader(headers, "slug");
-          const iExtrait = indexOfHeader(headers, "extrait");
-          const iUrl = indexOfHeader(headers, "url_page_sites");
-          const iDate = indexOfHeader(headers, "date");
-          const iAuteur = indexOfHeader(headers, "auteur");
-          const iImage = indexOfHeader(headers, "image");
-          const iContenu = indexOfHeader(headers, "contenu");
-          const iCategorie = indexOfHeader(headers, "categorie");
-          const iStatut = indexOfHeader(headers, "statut");
-
-          for (let r = 1; r < articlesSheet.length; r++) {
-            const row = articlesSheet[r];
-            const statut = iStatut >= 0 ? (row[iStatut] || "").toString().toLowerCase() : "";
-            if (statut === "brouillon") continue;
-
-            const titre = iTitre >= 0 ? row[iTitre] : "";
-            const extrait = iExtrait >= 0 ? row[iExtrait] : "";
-            const url = iUrl >= 0 ? row[iUrl] : "";
-            const date = iDate >= 0 ? row[iDate] : "";
-            const auteur = iAuteur >= 0 ? row[iAuteur] : "";
-            const image = iImage >= 0 ? row[iImage] : "";
-            const categorie = iCategorie >= 0 ? row[iCategorie] : "";
-
-            if (!titre && !extrait && !url) continue;
-
-            const card = document.createElement("div");
-            card.className = "card-article reveal";
-            card.innerHTML = `
-              ${
-                image
-                  ? `<div style="margin:-6px -6px 10px -6px;overflow:hidden;border-radius:16px 16px 10px 10px;">
-                       <img src="${image}" alt="${titre}" style="width:100%;height:170px;object-fit:cover;">
-                     </div>`
-                  : ""
-              }
-              <div class="card-title">${titre}</div>
-              <div class="article-meta">
-                ${date ? date + " • " : ""}${auteur || ""}${categorie ? " • " + categorie : ""}
-              </div>
-              <div class="card-text">${extrait}</div>
-              ${
-                url
-                  ? `<a href="${url}" target="_blank" rel="noopener" class="article-link">
-                       Lire l’article
-                     </a>`
-                  : ""
-              }
-            `;
-            articlesContainer.appendChild(card);
-          }
-        }
-
-        revealOnScroll();
-      } catch (e) {
-        console.error("Erreur lors du chargement Google Sheets :", e);
-      }
+        `).join("");
     }
 
-    loadFromSheets();
-  </script>
-</body>
-</html>
+    // Lancement automatique
+    loadData();
+</script>
