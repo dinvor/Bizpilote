@@ -1,170 +1,247 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bizpilote – Data & IA</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bizpilote – Data & IA</title>
+<style>
+/* RESET & BASE */
+body {margin:0; font-family:Arial,sans-serif; background:#0a0f14; color:white; overflow-x:hidden;}
+section {padding:60px 20px; max-width:1100px; margin:auto;}
+h1,h2 {color:#00ffcc; text-shadow:0 0 10px #00ffcc;}
+a {text-decoration:none;}
 
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #0a0f14;
-            color: white;
-        }
+/* GRID */
+.grid {display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:20px;}
 
-        header, section {
-            padding: 60px 20px;
-            max-width: 1100px;
-            margin: auto;
-        }
+/* CARDS & SKELETONS */
+.card, .skeleton, .testimonial-card, .freelance-card, #hero-title, #hero-subtitle, #hero-cta, .cta-section {
+    opacity:0; transform:translateY(20px); transition:opacity 0.6s ease, transform 0.6s ease;
+}
+.card.visible, .skeleton.visible, .testimonial-card.visible, .freelance-card.visible, 
+#hero-title.visible, #hero-subtitle.visible, #hero-cta.visible, .cta-section.visible {opacity:1; transform:translateY(0);}
+img {width:100%; border-radius:10px; display:block;}
 
-        h1, h2 {
-            color: #00ffcc;
-            text-shadow: 0 0 10px #00ffcc;
-        }
+/* HERO */
+.hero-cover {position:relative; height:90vh; min-height:520px; background:#0a0f14 center/cover no-repeat; display:flex; align-items:center; justify-content:center; text-align:center; overflow:hidden;}
+.hero-overlay {position:absolute; inset:0; background:linear-gradient(rgba(10,15,20,.75), rgba(10,15,20,.95));}
+.hero-content {position:relative; max-width:900px; padding:20px;}
+.hero-content h1 {font-size:2.6rem; text-shadow:0 0 15px #00ffcc; margin-bottom:20px;}
+.hero-content p {font-size:1.2rem; margin-bottom:30px; line-height:1.6;}
+.hero-cta {display:inline-block; padding:16px 36px; font-weight:bold; color:#0a0f14; background:linear-gradient(135deg,#00ffcc,#00cfa6); border-radius:30px; box-shadow:0 0 25px #00ffcc66; transition: transform 0.3s ease, box-shadow 0.3s ease;}
+.hero-cta:hover {transform:translateY(-3px); box-shadow:0 0 35px #00ffcc99;}
 
-        .card {
-            background: #111;
-            padding: 20px;
-            border-radius: 10px;
-            margin: 15px 0;
-            border: 1px solid #00ffcc55;
-            box-shadow: 0 0 10px #00ffcc33;
-        }
+/* SKELETON */
+.skeleton {position:relative; overflow:hidden; background:#111; border-radius:10px; padding:20px; border:1px solid #00ffcc55; box-shadow:0 0 10px #00ffcc33;}
+.skeleton::after {content:''; position:absolute; top:0; left:-150%; width:100%; height:100%; background:linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(0,255,204,0.2) 50%, rgba(255,255,255,0) 100%); animation:shimmer 1.5s infinite;}
+@keyframes shimmer {0%{left:-150%;} 100%{left:150%;}}
+.skeleton-img {height:150px; background:#00ffcc33; border-radius:10px; margin-bottom:15px;}
+.skeleton h3, .skeleton p {height:15px; width:80%; background:#00ffcc33; border-radius:5px; margin:10px 0;}
 
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 20px;
-        }
+/* TESTIMONIALS */
+.testimonial-wrapper {position:relative; overflow:hidden;}
+.testimonial-carousel {display:flex; gap:20px; transition:transform 0.5s ease;}
+.testimonial-card {background:#111; border-radius:10px; padding:20px; min-width:280px; flex:0 0 auto; border:1px solid #00ffcc55; box-shadow:0 0 10px #00ffcc33;}
+.stars {color:#ffd700; font-size:1.2em; margin-top:10px;}
+.testimonial-controls {display:flex; justify-content:space-between; align-items:center; margin-top:15px; color:#00ffcc;}
+.testimonial-controls button {background:transparent; border:1px solid #00ffcc; color:#00ffcc; padding:5px 10px; cursor:pointer; border-radius:5px;}
 
-        img {
-            width: 100%;
-            border-radius: 10px;
-        }
+/* FREELANCE */
+.freelance-card {background:#111; border-radius:15px; padding:25px; margin:20px 0; border:1px solid #00ffcc55; box-shadow:0 0 15px #00ffcc33; line-height:1.8;}
+.freelance-card p {margin:10px 0; font-size:1.05rem;}
 
-        .hero {
-            text-align: center;
-            padding: 100px 20px;
-        }
+/* CTA SECTION */
+.cta-section {background:#111; border-radius:15px; padding:25px; margin:20px 0; border:1px solid #00ffcc55; box-shadow:0 0 15px #00ffcc33; text-align:center; line-height:1.6;}
+.cta-section p {margin:10px 0; font-size:1.05rem;}
+.cta-section .hero-cta {margin-top:15px; display:inline-block;}
 
-        .hero img {
-            max-width: 300px;
-            border-radius: 10px;
-        }
+/* LOADER */
+#loader {position:fixed; inset:0; background:#0a0f14; display:flex; justify-content:center; align-items:center; z-index:9999;}
+#loader div {width:50px; height:50px; border:5px solid #00ffcc; border-top-color:#0a0f14; border-radius:50%; animation:spin 1s linear infinite;}
+@keyframes spin {to{transform:rotate(360deg);}}
 
-        footer {
-            text-align: center;
-            padding: 40px;
-            color: #00ffcc;
-        }
-    </style>
+/* RESPONSIVE */
+@media screen and (max-width:600px){
+    section{padding:40px 15px;}
+    .hero-content h1{font-size:1.9rem;}
+    .hero-content p{font-size:1rem;}
+    .testimonial-card{min-width:220px;}
+}
+</style>
 </head>
 <body>
 
-    <!-- SECTION HERO -->
-    <section class="hero">
-        <h1>Bizpilote – Data & Intelligence Artificielle</h1>
-        <p>Solutions modernes pour entrepreneurs, PME et indépendants.</p>
-        <img src="https://images.unsplash.com/photo-1535223289827-42f1e9919769" alt="Data & IA">
-    </section>
+<!-- LOADER -->
+<div id="loader"><div></div></div>
 
-    <!-- SECTION SEO -->
-    <section>
-        <h2>SEO & Visibilité</h2>
-        <div class="grid" id="seo-container">
-            <!-- Contenu chargé via API Google Sheets -->
+<!-- HERO -->
+<header class="hero-cover" id="hero-cover">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <h1 id="hero-title">Bizpilote – Data & IA</h1>
+        <p id="hero-subtitle">Pilotage de la performance, automatisation et IA</p>
+        <a href="#cta-contact" class="hero-cta" id="hero-cta">Demander un audit</a>
+    </div>
+</header>
+
+<!-- Pourquoi freelance -->
+<section>
+    <h2>🤝 Pourquoi un freelance ?</h2>
+    <div class="freelance-card" id="freelance-card">
+        <p>👤 Interlocuteur unique, humain et disponible</p>
+        <p>🎯 Solutions sur mesure, pas d’usine à gaz</p>
+        <p>⚡ Réactivité & flexibilité</p>
+        <p>💰 Coûts maîtrisés</p>
+        <p>📚 Pédagogie & accompagnement</p>
+    </div>
+</section>
+
+<!-- SERVICES -->
+<section>
+    <h2>Services</h2>
+    <div class="grid" id="services-container">
+        <div class="skeleton visible"><div class="skeleton-img"></div><h3></h3><p></p></div>
+    </div>
+</section>
+
+<!-- TECHNOLOGIES -->
+<section>
+    <h2>Outils & Technologies 🖥️</h2>
+    <div class="grid" id="technos-container">
+        <div class="skeleton visible"><div class="skeleton-img"></div><h3></h3><p></p></div>
+    </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section>
+    <h2>Ce que disent mes clients ⭐</h2>
+    <div class="testimonial-wrapper">
+        <div class="testimonial-carousel" id="testimonials-container">
+            <div class="skeleton visible"><h3></h3><p></p><div class="stars"></div></div>
         </div>
-    </section>
-
-    <!-- SECTION SERVICES -->
-    <section>
-        <h2>Services</h2>
-        <div class="grid" id="services-container">
-            <!-- Contenu chargé via API Google Sheets -->
+        <div class="testimonial-controls">
+            <button id="prev-testimonial">◀</button>
+            <span id="average-rating">⭐ 0 / 5 (0 avis)</span>
+            <button id="next-testimonial">▶</button>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- SECTION TECHNOLOGIES -->
-    <section>
-        <h2>Technologies</h2>
-        <div class="grid" id="technos-container">
-            <!-- Contenu chargé via API Google Sheets -->
-        </div>
-    </section>
+<!-- CTA CONTACT -->
+<section id="cta-contact">
+    <div class="cta-section visible">
+        <p>📩 Besoin d’un data scientist freelance ?</p>
+        <p>Parlons de votre projet data. Analyse • Tableaux de bord • Data science • Formation</p>
+        <a href="mailto:contact@bizpilote.com" class="hero-cta">Envoyer ma demande – Je vous réponds sous 48h</a>
+    </div>
+</section>
 
-    <!-- SECTION TESTIMONIALS -->
-    <section>
-        <h2>Témoignages</h2>
-        <div class="grid" id="testimonials-container">
-            <!-- Contenu chargé via API Google Sheets -->
-        </div>
-    </section>
+<footer>© 2025 Bizpilote – Data & IA</footer>
 
-    <!-- SECTION ARTICLES -->
-    <section>
-        <h2>Articles & Ressources</h2>
-        <div class="grid" id="articles-container">
-            <!-- Contenu chargé via API Google Sheets -->
-        </div>
-    </section>
-
-    <!-- SECTION CONTACT -->
-    <section>
-        <h2>Contact</h2>
-        <div class="card">
-            <p>Email : <strong>contact@bizpilote.com</strong></p>
-            <p>WhatsApp : <strong>+33 7 49 92 68 85</strong></p>
-            <p>Adresse : Tourcoing, France</p>
-        </div>
-    </section>
-
-    <footer>
-        © 2025 Bizpilote – Data & IA
-    </footer>
 <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbxTEli97kHN5qqeF-V1TSlITPkv19DXpqrvTrsZn6-JwxA0NNwy0WMjx5K3cyTJuHR0/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbxTEli97kHN5qqeF-V1TSlITPkv19DXpqrvTrsZn6-JwxA0NNwy0WMjx5K3cyTJuHR0/exec";
 
-    async function loadData() {
-        try {
-            const response = await fetch(API_URL);
-            const data = await response.json();
+/* LOADER */
+window.addEventListener('load', ()=>{
+    document.getElementById('loader').style.display='none';
+});
 
-            // HERO
-            if (data.Hero && data.Hero[1]) {
-                document.querySelector(".hero h1").textContent = data.Hero[1][0];
-                document.querySelector(".hero p").textContent = data.Hero[1][1];
-                document.querySelector(".hero img").src = data.Hero[1][2];
-            }
-
-            // SECTIONS
-            renderCards("seo-container", data.SEO);
-            renderCards("services-container", data.Services);
-            renderCards("technos-container", data.Technologies);
-            renderCards("testimonials-container", data.Testimonials);
-            renderCards("articles-container", data.Articles);
-
-        } catch (error) {
-            console.error("Erreur API :", error);
+/* LAZY LOAD IMAGES */
+const lazyObserver = new IntersectionObserver((entries, observer)=>{
+    entries.forEach(entry=>{
+        if(entry.isIntersecting){
+            const img=entry.target;
+            img.src=img.dataset.src;
+            img.removeAttribute('data-src');
+            observer.unobserve(img);
         }
-    }
+    });
+},{rootMargin:"0px 0px 200px 0px"});
+function observeImages(container){container.querySelectorAll('img[data-src]').forEach(img=>lazyObserver.observe(img));}
 
-    function renderCards(containerId, items) {
-        const container = document.getElementById(containerId);
-        if (!container || !items) return;
+/* LOAD SECTIONS */
+async function loadSection(containerId, dataSection){
+    const container=document.getElementById(containerId);
+    if(!container||!dataSection) return;
+    try{
+        const rows=dataSection.slice(1).filter(r=>r.some(c=>c));
+        if(!rows.length) return;
+        container.innerHTML=rows.map((row,i)=>{
+            let imgHtml=row[2]?`<img data-src="${row[2]}" alt="${row[0]||'Image'}">`:"";
+            return `<div class="card">${imgHtml}<h3>${row[0]||""}</h3><p>${row[1]||""}</p></div>`;
+        }).join("");
+        container.querySelectorAll(".card").forEach((c,i)=>setTimeout(()=>c.classList.add("visible"), i*150));
+        observeImages(container);
+    }catch(e){console.error("Erreur section",containerId,e);}
+}
 
-        // On ignore la première ligne (les titres)
-        const rows = items.slice(1);
+/* TESTIMONIALS */
+let testimonialIndex=0, testimonialCards=[];
+function renderTestimonials(containerId,data){
+    const container=document.getElementById(containerId);
+    if(!container||!data) return;
+    const rows=data.slice(1).filter(r=>r.some(c=>c));
+    if(!rows.length) return;
+    let totalRating=0;
+    const totalReviews=rows.length;
+    container.innerHTML=rows.map(r=>{
+        const name=r[0]||"Anonymous", comment=r[1]||"", rating=parseFloat(r[2])||5;
+        totalRating+=rating;
+        let stars=""; for(let s=1;s<=5;s++) stars+=s<=rating?"★":"☆";
+        return `<div class="testimonial-card"><h3>${name}</h3><p>${comment}</p><div class="stars">${stars}</div></div>`;
+    }).join("");
+    testimonialCards=Array.from(container.children);
+    testimonialCards.forEach((c,i)=>setTimeout(()=>c.classList.add("visible"), i*150));
+    document.getElementById("average-rating").textContent=`⭐ ${(totalRating/totalReviews).toFixed(1)} / 5 (${totalReviews} avis)`;
+}
 
-        container.innerHTML = rows.map(row => `
-            <div class="card">
-                ${row[2] ? `<img src="${row[2]}" alt="">` : ""}
-                <h3>${row[0] || ""}</h3>
-                <p>${row[1] || ""}</p>
-            </div>
-        `).join("");
-    }
+/* CAROUSEL NAV */
+document.getElementById("prev-testimonial").addEventListener("click",()=>slideTestimonial(-1));
+document.getElementById("next-testimonial").addEventListener("click",()=>slideTestimonial(1));
+function slideTestimonial(dir){
+    if(!testimonialCards.length) return;
+    testimonialIndex+=dir;
+    if(testimonialIndex<0) testimonialIndex=testimonialCards.length-1;
+    if(testimonialIndex>=testimonialCards.length) testimonialIndex=0;
+    document.getElementById("testimonials-container").style.transform=`translateX(${-testimonialCards[testimonialIndex].offsetLeft}px)`;
+}
+setInterval(()=>slideTestimonial(1),7000);
 
-    loadData();
+/* LOAD DATA */
+async function loadData(){
+    try{
+        const res=await fetch(API_URL);
+        const data=await res.json();
+        // Hero
+        if(data.Hero && data.Hero[1]){
+            const h=data.Hero[1];
+            if(h[0]) document.getElementById("hero-title").textContent=h[0];
+            if(h[1]) document.getElementById("hero-subtitle").textContent=h[1];
+            if(h[2]) document.getElementById("hero-cover").style.backgroundImage=`url("${h[2]}")`;
+            if(h[3]) document.getElementById("hero-cta").textContent=h[3] || "Demander un audit";
+            if(h[4]) document.getElementById("hero-cta").href=h[4];
+        }
+        await Promise.all([
+            loadSection("services-container", data.Services),
+            loadSection("technos-container", data.Technologies),
+            renderTestimonials("testimonials-container", data.Testimonials)
+        ]);
+    }catch(e){console.error("Erreur API:", e);}
+}
+
+/* SCROLL ANIMATION */
+const scrollObserver=new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+        if(entry.isIntersecting){
+            entry.target.classList.add("visible");
+            scrollObserver.unobserve(entry.target);
+        }
+    });
+},{threshold:0.2});
+document.querySelectorAll(".card, .freelance-card, .testimonial-card, #hero-title, #hero-subtitle, #hero-cta, .skeleton, .cta-section")
+.forEach(el=>scrollObserver.observe(el));
+
+loadData();
 </script>
+</body>
+</html>
