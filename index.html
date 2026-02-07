@@ -6,66 +6,82 @@
 <title>Bizpilote – Data & IA</title>
 <style>
 /* RESET & BASE */
-body {margin:0; font-family:Arial,sans-serif; background:#0a0f14; color:white; overflow-x:hidden;}
-section {padding:60px 20px; max-width:1100px; margin:auto;}
-h1,h2 {color:#00ffcc; text-shadow:0 0 10px #00ffcc;}
+* {margin:0; padding:0; box-sizing:border-box;}
+body {font-family:Arial,sans-serif; background:#0a0f14; color:white; overflow-x:hidden; padding:10px;}
 a {text-decoration:none;}
+img {display:block; max-width:100%; object-fit:cover; border-radius:10px;}
 
-/* GRID */
-.grid {display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:20px;}
+/* TITRES */
+h1,h2 {color:#00ffcc; text-shadow:0 0 10px #00ffcc; text-align:center;}
+h1 {font-size:3rem; margin-bottom:20px;}
+h2 {font-size:2rem; margin-bottom:30px;}
 
-/* CARDS & SKELETONS */
-.card, .skeleton, .testimonial-card, .freelance-card, #hero-title, #hero-subtitle, #hero-cta, .cta-section {
-    opacity:0; transform:translateY(20px); transition:opacity 0.6s ease, transform 0.6s ease;
-}
-.card.visible, .skeleton.visible, .testimonial-card.visible, .freelance-card.visible, 
-#hero-title.visible, #hero-subtitle.visible, #hero-cta.visible, .cta-section.visible {opacity:1; transform:translateY(0);}
-img {width:100%; border-radius:10px; display:block;}
+/* SECTION SPACING */
+section {padding:50px 15px; margin-bottom:40px; width:100%;}
 
 /* HERO */
-.hero-cover {position:relative; height:90vh; min-height:520px; background:#0a0f14 center/cover no-repeat; display:flex; align-items:center; justify-content:center; text-align:center; overflow:hidden;}
+.hero-cover {position:relative; height:90vh; min-height:500px; background:#0a0f14 center/cover no-repeat; display:flex; align-items:center; justify-content:center; text-align:center; overflow:hidden; margin-bottom:40px;}
 .hero-overlay {position:absolute; inset:0; background:linear-gradient(rgba(10,15,20,.75), rgba(10,15,20,.95));}
 .hero-content {position:relative; max-width:900px; padding:20px;}
-.hero-content h1 {font-size:2.6rem; text-shadow:0 0 15px #00ffcc; margin-bottom:20px;}
-.hero-content p {font-size:1.2rem; margin-bottom:30px; line-height:1.6;}
+.hero-content h1 {font-size:3rem; margin-bottom:20px;}
+.hero-content p {font-size:1.3rem; margin-bottom:30px;}
 .hero-cta {display:inline-block; padding:16px 36px; font-weight:bold; color:#0a0f14; background:linear-gradient(135deg,#00ffcc,#00cfa6); border-radius:30px; box-shadow:0 0 25px #00ffcc66; transition: transform 0.3s ease, box-shadow 0.3s ease;}
 .hero-cta:hover {transform:translateY(-3px); box-shadow:0 0 35px #00ffcc99;}
 
-/* SKELETON */
-.skeleton {position:relative; overflow:hidden; background:#111; border-radius:10px; padding:20px; border:1px solid #00ffcc55; box-shadow:0 0 10px #00ffcc33;}
-.skeleton::after {content:''; position:absolute; top:0; left:-150%; width:100%; height:100%; background:linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(0,255,204,0.2) 50%, rgba(255,255,255,0) 100%); animation:shimmer 1.5s infinite;}
-@keyframes shimmer {0%{left:-150%;} 100%{left:150%;}}
-.skeleton-img {height:150px; background:#00ffcc33; border-radius:10px; margin-bottom:15px;}
-.skeleton h3, .skeleton p {height:15px; width:80%; background:#00ffcc33; border-radius:5px; margin:10px 0;}
-
-/* TESTIMONIALS */
-.testimonial-wrapper {position:relative; overflow:hidden;}
-.testimonial-carousel {display:flex; gap:20px; transition:transform 0.5s ease;}
-.testimonial-card {background:#111; border-radius:10px; padding:20px; min-width:280px; flex:0 0 auto; border:1px solid #00ffcc55; box-shadow:0 0 10px #00ffcc33;}
-.stars {color:#ffd700; font-size:1.2em; margin-top:10px;}
-.testimonial-controls {display:flex; justify-content:space-between; align-items:center; margin-top:15px; color:#00ffcc;}
-.testimonial-controls button {background:transparent; border:1px solid #00ffcc; color:#00ffcc; padding:5px 10px; cursor:pointer; border-radius:5px;}
+/* CARDS GRID */
+.grid {display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:20px; justify-items:center;}
+.card, .tech-card, .testimonial-card, .freelance-card {background:#111; border-radius:10px; padding:20px; text-align:center; border:1px solid #00ffcc55; box-shadow:0 0 10px #00ffcc33; transition:transform 0.3s; opacity:0; transform:translateY(20px);}
+.card.visible, .tech-card.visible, .testimonial-card.visible, .freelance-card.visible {opacity:1; transform:translateY(0);}
 
 /* FREELANCE */
-.freelance-card {background:#111; border-radius:15px; padding:25px; margin:20px 0; border:1px solid #00ffcc55; box-shadow:0 0 15px #00ffcc33; line-height:1.8;}
-.freelance-card p {margin:10px 0; font-size:1.05rem;}
+.freelance-card {line-height:1.5; max-width:900px; margin:auto; margin-bottom:20px;}
+.freelance-card p {font-size:1.1rem; margin:8px 0;}
 
 /* CTA SECTION */
-.cta-section {background:#111; border-radius:15px; padding:25px; margin:20px 0; border:1px solid #00ffcc55; box-shadow:0 0 15px #00ffcc33; text-align:center; line-height:1.6;}
-.cta-section p {margin:10px 0; font-size:1.05rem;}
+.cta-section {background:#111; border-radius:15px; padding:25px; margin:20px auto; border:1px solid #00ffcc55; box-shadow:0 0 15px #00ffcc33; text-align:center; line-height:1.5; max-width:900px;}
+.cta-section p {margin:10px 0; font-size:1.1rem;}
 .cta-section .hero-cta {margin-top:15px; display:inline-block;}
+
+/* TECH CONTAINER (Outils & Technologies) */
+.tech-container {display:flex; flex-wrap:wrap; justify-content:center; gap:20px;}
+.tech-card {flex:0 1 200px; text-align:center; background:#111; border-radius:10px; padding:20px; border:1px solid #00ffcc55; box-shadow:0 0 10px #00ffcc33; transition:transform 0.3s; opacity:0; transform: translateY(20px);}
+.tech-card.visible {opacity:1; transform: translateY(0);}
+.tech-card img {width:200px; height:200px; object-fit:cover; margin-bottom:10px;}
+
+/* TESTIMONIALS CAROUSEL */
+.carousel-wrapper {position:relative; overflow:hidden; width:100%; margin:20px auto;}
+.carousel-track {display:flex; gap:20px; transition:transform 0.5s linear;}
+.testimonial-card {min-width:280px; max-width:400px; display:flex; flex-direction:column; justify-content:flex-start; align-items:center; background:#111; border-radius:10px; padding:20px; border:1px solid #00ffcc55; box-shadow:0 0 10px #00ffcc33; opacity:0; transform:translateY(20px);}
+.testimonial-card.visible {opacity:1; transform:translateY(0);}
+.testimonial-card img {width:100%; height:auto; margin-bottom:10px;} /* rectangles */
+.stars {color:#ffd700; font-size:1.2em; margin-top:10px;}
+
+/* CONTROLS */
+.carousel-controls {display:flex; justify-content:center; gap:20px; align-items:center; margin-top:15px; color:#00ffcc;}
+.carousel-controls button {background:transparent; border:1px solid #00ffcc; color:#00ffcc; padding:5px 10px; cursor:pointer; border-radius:5px;}
 
 /* LOADER */
 #loader {position:fixed; inset:0; background:#0a0f14; display:flex; justify-content:center; align-items:center; z-index:9999;}
 #loader div {width:50px; height:50px; border:5px solid #00ffcc; border-top-color:#0a0f14; border-radius:50%; animation:spin 1s linear infinite;}
 @keyframes spin {to{transform:rotate(360deg);}}
 
+/* FOOTER */
+footer {text-align:center; margin-top:40px; padding:20px; color:#00ffcc; border-top:1px solid #00ffcc55;}
+
 /* RESPONSIVE */
-@media screen and (max-width:600px){
-    section{padding:40px 15px;}
-    .hero-content h1{font-size:1.9rem;}
-    .hero-content p{font-size:1rem;}
-    .testimonial-card{min-width:220px;}
+@media screen and (max-width:768px){
+    h1{font-size:2.2rem;}
+    h2{font-size:1.5rem;}
+    .hero-content p{font-size:1.1rem;}
+    .tech-card {flex:0 1 150px;}
+    .tech-card img {width:150px; height:150px;}
+    .testimonial-card {min-width:200px; max-width:300px;}
+}
+@media screen and (max-width:480px){
+    .grid {grid-template-columns:1fr;}
+    .tech-card {flex:0 1 120px;}
+    .tech-card img {width:120px; height:120px;}
+    .carousel-track {gap:15px;}
 }
 </style>
 </head>
@@ -96,30 +112,30 @@ img {width:100%; border-radius:10px; display:block;}
     </div>
 </section>
 
-<!-- SERVICES -->
+<!-- SERVICES PROPOSÉS -->
 <section>
-    <h2>Services</h2>
+    <h2>💼 Services Proposés</h2>
     <div class="grid" id="services-container">
         <div class="skeleton visible"><div class="skeleton-img"></div><h3></h3><p></p></div>
     </div>
 </section>
 
-<!-- TECHNOLOGIES -->
+<!-- OUTILS & TECHNOLOGIES -->
 <section>
     <h2>Outils & Technologies 🖥️</h2>
-    <div class="grid" id="technos-container">
-        <div class="skeleton visible"><div class="skeleton-img"></div><h3></h3><p></p></div>
+    <div class="tech-container" id="technos-container">
+        <div class="skeleton visible"><div class="skeleton-img"></div><h3></h3></div>
     </div>
 </section>
 
 <!-- TESTIMONIALS -->
 <section>
     <h2>Ce que disent mes clients ⭐</h2>
-    <div class="testimonial-wrapper">
-        <div class="testimonial-carousel" id="testimonials-container">
+    <div class="carousel-wrapper">
+        <div class="carousel-track" id="testimonials-container">
             <div class="skeleton visible"><h3></h3><p></p><div class="stars"></div></div>
         </div>
-        <div class="testimonial-controls">
+        <div class="carousel-controls">
             <button id="prev-testimonial">◀</button>
             <span id="average-rating">⭐ 0 / 5 (0 avis)</span>
             <button id="next-testimonial">▶</button>
@@ -139,14 +155,10 @@ img {width:100%; border-radius:10px; display:block;}
 <footer>© 2025 Bizpilote – Data & IA</footer>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbxTEli97kHN5qqeF-V1TSlITPkv19DXpqrvTrsZn6-JwxA0NNwy0WMjx5K3cyTJuHR0/exec";
+// Loader
+window.addEventListener('load', ()=>{document.getElementById('loader').style.display='none';});
 
-/* LOADER */
-window.addEventListener('load', ()=>{
-    document.getElementById('loader').style.display='none';
-});
-
-/* LAZY LOAD IMAGES */
+// Lazy load images
 const lazyObserver = new IntersectionObserver((entries, observer)=>{
     entries.forEach(entry=>{
         if(entry.isIntersecting){
@@ -159,8 +171,8 @@ const lazyObserver = new IntersectionObserver((entries, observer)=>{
 },{rootMargin:"0px 0px 200px 0px"});
 function observeImages(container){container.querySelectorAll('img[data-src]').forEach(img=>lazyObserver.observe(img));}
 
-/* LOAD SECTIONS */
-async function loadSection(containerId, dataSection){
+// Load section
+async function loadSection(containerId, dataSection, type="card"){
     const container=document.getElementById(containerId);
     if(!container||!dataSection) return;
     try{
@@ -168,15 +180,15 @@ async function loadSection(containerId, dataSection){
         if(!rows.length) return;
         container.innerHTML=rows.map((row,i)=>{
             let imgHtml=row[2]?`<img data-src="${row[2]}" alt="${row[0]||'Image'}">`:"";
-            return `<div class="card">${imgHtml}<h3>${row[0]||""}</h3><p>${row[1]||""}</p></div>`;
+            const cardClass = type==="tech" ? "tech-card" : type==="testimonial" ? "testimonial-card" : "card";
+            return `<div class="${cardClass}">${imgHtml}<h3>${row[0]||""}</h3><p>${row[1]||""}</p></div>`;
         }).join("");
-        container.querySelectorAll(".card").forEach((c,i)=>setTimeout(()=>c.classList.add("visible"), i*150));
+        container.querySelectorAll("."+type+"-card, .card").forEach((c,i)=>setTimeout(()=>c.classList.add("visible"), i*150));
         observeImages(container);
     }catch(e){console.error("Erreur section",containerId,e);}
 }
 
-/* TESTIMONIALS */
-let testimonialIndex=0, testimonialCards=[];
+// Testimonials
 function renderTestimonials(containerId,data){
     const container=document.getElementById(containerId);
     if(!container||!data) return;
@@ -190,29 +202,49 @@ function renderTestimonials(containerId,data){
         let stars=""; for(let s=1;s<=5;s++) stars+=s<=rating?"★":"☆";
         return `<div class="testimonial-card"><h3>${name}</h3><p>${comment}</p><div class="stars">${stars}</div></div>`;
     }).join("");
-    testimonialCards=Array.from(container.children);
-    testimonialCards.forEach((c,i)=>setTimeout(()=>c.classList.add("visible"), i*150));
+    container.querySelectorAll(".testimonial-card").forEach((c,i)=>setTimeout(()=>c.classList.add("visible"), i*150));
     document.getElementById("average-rating").textContent=`⭐ ${(totalRating/totalReviews).toFixed(1)} / 5 (${totalReviews} avis)`;
 }
 
-/* CAROUSEL NAV */
-document.getElementById("prev-testimonial").addEventListener("click",()=>slideTestimonial(-1));
-document.getElementById("next-testimonial").addEventListener("click",()=>slideTestimonial(1));
-function slideTestimonial(dir){
-    if(!testimonialCards.length) return;
-    testimonialIndex+=dir;
-    if(testimonialIndex<0) testimonialIndex=testimonialCards.length-1;
-    if(testimonialIndex>=testimonialCards.length) testimonialIndex=0;
-    document.getElementById("testimonials-container").style.transform=`translateX(${-testimonialCards[testimonialIndex].offsetLeft}px)`;
-}
-setInterval(()=>slideTestimonial(1),7000);
+// Carousel testimonials
+function setupInfiniteCarousel(trackId, prevBtnId, nextBtnId, interval=4000){
+    const track=document.getElementById(trackId);
+    let index=0;
+    const cloneFirst = track.children[0].cloneNode(true);
+    track.appendChild(cloneFirst);
+    const cards = track.children;
+    const cardWidth = cards[0].offsetWidth + 20;
 
-/* LOAD DATA */
+    function moveTo(i){
+        track.style.transition="transform 0.5s ease-in-out";
+        track.style.transform=`translateX(${-i*cardWidth}px)`;
+    }
+
+    function next(){
+        index++;
+        moveTo(index);
+        if(index >= cards.length-1){
+            setTimeout(()=>{track.style.transition="none"; track.style.transform="translateX(0)"; index=0;}, 510);
+        }
+    }
+
+    function prev(){
+        if(index===0){ track.style.transition="none"; track.style.transform=`translateX(${- (cards.length-1) * cardWidth}px)`; index=cards.length-1; setTimeout(()=>{track.style.transition="transform 0.5s ease-in-out"; prev();}, 50); return; }
+        index--;
+        moveTo(index);
+    }
+
+    document.getElementById(prevBtnId).addEventListener("click", prev);
+    document.getElementById(nextBtnId).addEventListener("click", next);
+    setInterval(next, interval);
+}
+
+// Load data
+const API_URL = "https://script.google.com/macros/s/AKfycbxTEli97kHN5qqeF-V1TSlITPkv19DXpqrvTrsZn6-JwxA0NNwy0WMjx5K3cyTJuHR0/exec";
 async function loadData(){
     try{
         const res=await fetch(API_URL);
         const data=await res.json();
-        // Hero
         if(data.Hero && data.Hero[1]){
             const h=data.Hero[1];
             if(h[0]) document.getElementById("hero-title").textContent=h[0];
@@ -223,13 +255,15 @@ async function loadData(){
         }
         await Promise.all([
             loadSection("services-container", data.Services),
-            loadSection("technos-container", data.Technologies),
+            loadSection("technos-container", data.Technologies,"tech"),
             renderTestimonials("testimonials-container", data.Testimonials)
         ]);
+        // Carousel testimonials only
+        setupInfiniteCarousel("testimonials-container","prev-testimonial","next-testimonial");
     }catch(e){console.error("Erreur API:", e);}
 }
 
-/* SCROLL ANIMATION */
+// Scroll animations
 const scrollObserver=new IntersectionObserver((entries)=>{
     entries.forEach(entry=>{
         if(entry.isIntersecting){
@@ -238,7 +272,7 @@ const scrollObserver=new IntersectionObserver((entries)=>{
         }
     });
 },{threshold:0.2});
-document.querySelectorAll(".card, .freelance-card, .testimonial-card, #hero-title, #hero-subtitle, #hero-cta, .skeleton, .cta-section")
+document.querySelectorAll(".card, .tech-card, .freelance-card, .testimonial-card, #hero-title, #hero-subtitle, #hero-cta, .skeleton, .cta-section")
 .forEach(el=>scrollObserver.observe(el));
 
 loadData();
